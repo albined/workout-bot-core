@@ -12,5 +12,5 @@ class Message:
     message_type: MessageType
     message: str
     author: Optional[str] = None
-    recipients: List[int] = field(default_factory=list)
+    recipients: List[str] = field(default_factory=list)
     image: Optional[bytes] = None
