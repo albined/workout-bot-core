@@ -48,16 +48,17 @@ class DatabaseHandler:
         self.drop_tables()
         self.create_tables()
 
-    def get_user_scores_over_time(self, user_id):
+    def get_user_scores_over_time(self, username):
         with self.conn:
             cur = self.conn.cursor()
             cur.execute('''
                 SELECT c.challenge_name, s.score, s.completed_at 
                 FROM Scores s 
                 JOIN Challenges c ON s.challenge_id = c.challenge_id 
-                WHERE s.user_id = ? 
+                JOIN Users u ON s.user_id = u.user_id 
+                WHERE u.username = ? 
                 ORDER BY s.completed_at
-            ''', (user_id,))
+            ''', (username,))
             return cur.fetchall()
         
     def user_exists(self, username):
