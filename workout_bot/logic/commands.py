@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from ..input_output.message import Message, MessageType
 from typing import List, Optional
+import time
 
 class Command(ABC):
     def __init__(self, db_handler) -> None:
@@ -43,3 +44,17 @@ class Hej(Command):
     @staticmethod
     def aliases() -> List[str] | None:
         return ['hej', 'hejsan', 'tjenare', 'tjena', 'hallå', 'hi']
+    
+class Delay(Command):
+    async def get_reply(self, message: Message) -> Message:
+        time.sleep(2)
+        reply = Message(
+            message_type=MessageType.TO_SEND,
+            message=f"långsamt hej!",
+            recipients=[message.author]
+        )
+        return reply
+    
+    @staticmethod
+    def aliases() -> List[str] | None:
+        return ['delay']
