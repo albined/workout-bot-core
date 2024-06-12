@@ -61,7 +61,7 @@ class DatabaseHandler:
         if not self.user_exists(username):
             with self.conn:
                 self.conn.execute('''
-                    INSERT INTO Users (username, subscribed) VALUES (?, ?, ?)
+                    INSERT INTO Users (username, subscribed) VALUES (?, ?)
                 ''', (username, subscribed))
                 return True
         return False
@@ -76,7 +76,7 @@ class DatabaseHandler:
         with self.conn:
             cur = self.conn.cursor()
             cur.execute('''
-                SELECT username, email FROM Users WHERE subscribed = TRUE
+                SELECT username FROM Users WHERE subscribed = TRUE
             ''')
             return cur.fetchall()
         
