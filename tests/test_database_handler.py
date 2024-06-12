@@ -66,9 +66,10 @@ class TestDatabaseHandler(unittest.TestCase):
         challenge_name = 'challenge1'
         challenge_basepoints = 100
         date = '2024-06-11'
+        time = '12:00'
         is_bonus = False
 
-        self.db_handler.add_challenge(challenge_name, challenge_basepoints, date, is_bonus)
+        self.db_handler.add_challenge(challenge_name, challenge_basepoints, date, time, is_bonus)
         
         with self.db_handler.conn:
             cur = self.db_handler.conn.cursor()
@@ -79,9 +80,10 @@ class TestDatabaseHandler(unittest.TestCase):
         challenge_name = 'challenge1'
         challenge_basepoints = 100
         date = '2024-06-11'
+        time = '12:00'
         is_bonus = False
 
-        self.db_handler.add_challenge(challenge_name, challenge_basepoints, date, is_bonus)
+        self.db_handler.add_challenge(challenge_name, challenge_basepoints, date, time, is_bonus)
 
         challenges = self.db_handler.get_challenge_by_date(date)
         self.assertEqual(len(challenges), 1)
@@ -94,8 +96,9 @@ class TestDatabaseHandler(unittest.TestCase):
         challenge_name = 'challenge1'
         challenge_basepoints = 100
         date = '2024-06-11'
+        time  = '12:00:00'
         is_bonus = False
-        self.db_handler.add_challenge(challenge_name, challenge_basepoints, date, is_bonus)
+        self.db_handler.add_challenge(challenge_name, challenge_basepoints, date, time, is_bonus)
         
         with self.db_handler.conn:
             cur = self.db_handler.conn.cursor()
@@ -105,7 +108,7 @@ class TestDatabaseHandler(unittest.TestCase):
             challenge_id = cur.fetchone()[0]
 
         score = 50
-        self.db_handler.add_score_for_user(user_id, challenge_id, score)
+        self.db_handler.add_score_for_user(user_id, challenge_id, score, completed_at=date)
 
         completed_challenges = self.db_handler.list_challenges_completed_by_user(user_id, date)
         self.assertEqual(len(completed_challenges), 1)

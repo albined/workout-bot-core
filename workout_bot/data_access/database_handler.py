@@ -22,6 +22,7 @@ class DatabaseHandler:
                         challenge_name TEXT NOT NULL,
                         challenge_basepoints INTEGER NOT NULL,
                         date DATE NOT NULL,
+                        time TIME NOT NULL,
                         is_bonus BOOLEAN DEFAULT FALSE
                     )
                 """)
@@ -36,6 +37,16 @@ class DatabaseHandler:
                         FOREIGN KEY (challenge_id) REFERENCES Challenges(challenge_id)
                     )
                 """)
+
+    def drop_tables(self):
+        with self.conn:
+            self.conn.execute("DROP TABLE IF EXISTS Users")
+            self.conn.execute("DROP TABLE IF EXISTS Challenges")
+            self.conn.execute("DROP TABLE IF EXISTS Scores")
+
+    def clear_database(self):
+        self.drop_tables()
+        self.create_tables()
 
     def get_user_scores_over_time(self, user_id):
         with self.conn:
@@ -80,11 +91,11 @@ class DatabaseHandler:
             ''')
             return cur.fetchall()
         
-    def add_challenge(self, challenge_name, challenge_basepoints, date, is_bonus):
+    def add_challenge(self, challenge_name, challenge_basepoints, date, time, is_bonus):
         with self.conn:
             self.conn.execute('''
-                INSERT INTO Challenges (challenge_name, challenge_basepoints, date, is_bonus) VALUES (?, ?, ?, ?)
-            ''', (challenge_name, challenge_basepoints, date, is_bonus))
+                INSERT INTO Challenges (challenge_name, challenge_basepoints, date, time, is_bonus) VALUES (?, ?, ?, ?, ?)
+            ''', (challenge_name, challenge_basepoints, date, time, is_bonus))
 
     def get_challenge_by_date(self, date=None):
         if date is None:
